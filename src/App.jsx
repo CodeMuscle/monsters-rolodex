@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import './styles/App.css';
 import CardList from './components/card-list/CardLIst';
+import SearchBox from './components/search-box/SearchBox';
 
 class App extends Component{
   constructor() {
@@ -50,17 +51,13 @@ class App extends Component{
     
     return(
       <div className="App flex align-center justify-center flex-col">
-        <input className="search-box px-6 py-3 my-3 self-center border-black-600 border-2 rounded-lg w-[350px]" type="search" placeholder="Search for monsters" onChange={onSearchChange} />
-        {filteredMonsters.map((monster) => {
-          return(
-            <div key={monster.id}>
-              <h1 className="font-bold text-[40px] text-white text-center">{monster.name}</h1>
-            </div>
-          );
-        })}
+        <h1 className="my-4 text-teal-400 font-bold text-[75px] underline">Monster's Inc.</h1>
+        <SearchBox className="px-6 py-3 my-6 self-center border-black-600 border-2 rounded-lg w-[350px]" onChangeHandler={onSearchChange} placeholder="Search for monsters"/>
+        <CardList monsters={filteredMonsters} />
       </div>
     )
   }
 }
 
 export default App
+
