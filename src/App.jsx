@@ -1,15 +1,66 @@
-import { useState } from 'react';
+import { Component } from 'react';
 import './index.css'
+import CardList from './components/card-list/CardLIst';
 
-function App() {
-  const [count, setCount] = useState(0)
+class App extends Component{
+  constructor() {
+    super();
 
-  return (
-      <div className="p-10 self-center flex flex-col gap-10 bg-gray-400 text-center">
-        <p className="text-black font-bold text-[40px] bg-transparent">Hi, I'm Ganesh</p>
-        <button className="p-4 border-black bg-blue-400 font-semibold text-[20px] rounded-lg w-[200px] self-center">Change my name!</button>
+    this.state = {
+      monsters: [],
+      filterField: '',
+    };
+    console.log('costructor()');
+  };
+
+  componentDidMount(){
+
+    console.log('componentDidMount()');
+
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then((response) => response.json())
+    .then((users) => 
+      this.setState(() => {
+        return {monsters: users}
+      },
+      () => {
+        console.log(this.state);
+        }
+      )
+    )
+  }
+  
+  onSearchChange = (event) => {
+    const filterField = event.target.value.toLowerCase();
+    this.setState(() => {
+      return { filterField }
+    });
+  };
+
+  render() {
+    console.log('render()');
+    const { monsters, filterField } = this.state;
+    const { onSearchChange } = this;
+
+
+    const filteredMonsters = monsters.filter((monster) => {
+      return monster.name.toLowerCase().includes(filterField);
+   });
+
+    
+    return(
+      <div className="App flex align-center justify-center flex-col">
+        <input className="search-box px-6 py-3 my-3 self-center border-black-600 border-2 rounded-lg w-[350px]" type="search" placeholder="Search for monsters" onChange={onSearchChange} />
+        {filteredMonsters.map((monster) => {
+          return(
+            <div key={monster.id}>
+              <h1 className="font-bold text-[40px] text-black text-center">{monster.name}</h1>
+            </div>
+          );
+        })}
       </div>
-  )
+    )
+  }
 }
 
 export default App
